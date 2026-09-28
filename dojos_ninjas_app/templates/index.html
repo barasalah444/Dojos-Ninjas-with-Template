@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dojos & Ninjas with Template</title>
+    <style>
+        body { font-family: sans-serif; margin: 30px; }
+        .forms-container { display: flex; gap: 50px; margin-bottom: 40px; }
+        .form-box { display: flex; flex-direction: column; gap: 10px; width: 250px; }
+        .form-group { display: flex; justify-content: space-between; align-items: center; }
+        .dojo-list { margin-top: 20px; }
+        .dojo-item { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="forms-container">
+        <!-- Add Dojo Form -->
+        <form action="/create/dojo" method="POST" class="form-box">
+            {% csrf_token %}
+            <h3>Add a Dojo</h3>
+            <div class="form-group">
+                <label>Name:</label>
+                <input type="text" name="name" required>
+            </div>
+            <div class="form-group">
+                <label>City:</label>
+                <input type="text" name="city" required>
+            </div>
+            <div class="form-group">
+                <label>State:</label>
+                <input type="text" name="state" required>
+            </div>
+            <button type="submit">Add</button>
+        </form>
+
+        <!-- Add Ninja Form -->
+        <form action="/create/ninja" method="POST" class="form-box">
+            {% csrf_token %}
+            <h3>Add a Ninja</h3>
+            <div class="form-group">
+                <label>First Name:</label>
+                <input type="text" name="first_name" required>
+            </div>
+            <div class="form-group">
+                <label>Last Name:</label>
+                <input type="text" name="last_name" required>
+            </div>
+            <div class="form-group">
+                <label>Dojo:</label>
+                <select name="dojo_id" required>
+                    {% for dojo in dojos %}
+                        <option value="{{ dojo.id }}">{{ dojo.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit">Add</button>
+        </form>
+    </div>
+
+    <hr>
+
+    <!-- Display All Dojos & Ninjas -->
+    <h2>All the Dojos</h2>
+    <div class="dojo-list">
+        {% for dojo in dojos %}
+            <div class="dojo-item">
+                <span>
+                    <strong>Ninjas at the {{ dojo.name }} Dojo - {{ dojo.ninjas.count }}</strong>
+                </span>
+                <a href="/delete/dojo/{{ dojo.id }}">
+                    <button type="button">Delete Dojo</button>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+
+</body>
+</html>
